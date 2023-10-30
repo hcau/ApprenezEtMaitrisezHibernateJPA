@@ -2,6 +2,7 @@ package com.hibernate4all.tutorial.domain;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "MOVIE")
@@ -60,5 +61,34 @@ public class Movie {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if ((!(obj instanceof Movie))) return false;
+        Movie other = (Movie) obj;
+        // pas d'identifiant fonctionnel.
+        if(id == null && other.getId() == null){
+            return Objects.equals(name, other.getName())
+                    && Objects.equals(description, other.getDescription())
+                    && Objects.equals(certification, other.getCertification());
+        }
+        return id != null && Objects.equals( id, other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(31);
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", certification=" + certification +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

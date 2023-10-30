@@ -1,0 +1,3 @@
+TRUNCATE TABLE MOVIE;
+INSERT INTO MOVIE (name, id) VALUES ('Inception', -1L);
+INSERT INTO MOVIE (name, id) VALUES ('Memento', -2L);

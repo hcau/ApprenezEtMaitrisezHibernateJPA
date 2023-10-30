@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				%-5level %logger{15}.%M %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+<!--	loguer les requêtes sql ==> règle d'or -->
+	<logger name="org.hibernate.SQL" level="DEBUG" />
+
+<!--	regarder si movie est dans la session  ==> règle d'or -->
+	<logger name="com.hibernate4all.tutorial.repository" level="TRACE" />
+
+<!--	<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" />-->
+<!--	gestionnaire de transaction de Spring : voir quand les transactions sont ouvertes ou fermées ==> règle d'or-->
+<!--	<logger name="org.springframework.orm.jpa.JpaTransactionManager" level="DEBUG" />-->
+<!--	implémentation de la session dans les sources d'hibernate-->
+<!--	Pour afficher les ouvertures et fermetures de session-->
+<!--	<logger name="org.hibernate.internal.SessionImpl" level="TRACE" />-->
+	
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

@@ -1,6 +1,7 @@
 package com.hibernate4all.tutorial.repository;
 
 import com.hibernate4all.tutorial.config.PersistenceConfigTest;
+import com.hibernate4all.tutorial.domain.Certification;
 import com.hibernate4all.tutorial.domain.Movie;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,7 @@ public class MovieRepositoryTest {
     public void save_casNominal(){
         Movie movie = new Movie();
         movie.setName("Inception");
+        movie.setCertification(Certification.INTERDIT_MOINS_12);
         repository.persist(movie);
         System.out.println("fin de test");
     }
@@ -78,6 +80,7 @@ public class MovieRepositoryTest {
     public void find_CasNominal(){
         Movie memento = repository.find(-2L);
         assertThat(memento.getName()).as("mauvais film récupéré").isEqualTo("Memento");
+        assertThat(memento.getCertification()).as("Le converter n'a pas fonctionné.").isEqualTo(Certification.INTERDIT_MOINS_12);
     }
 
     @Test

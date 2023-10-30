@@ -1,13 +1,15 @@
 package com.hibernate4all.tutorial.domain;
 
 
-import org.springframework.stereotype.Repository;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "MOVIE")
 public class Movie {
+
+//    public enum Certification{
+//        TOUS_PUBLIC, INTERDIT_MOINS_12, INTERDIT_MOINS_16, INTERDIT_MOINS_18
+//    }
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -16,6 +18,19 @@ public class Movie {
     // On appelle cela du mapping en field access.
     @Column(nullable = false) // contrainte not null en base de données
     private String name;
+
+    //@Enumerated // On indique à Hibernate que c'est une énumération.
+    //@Enumerated(EnumType.STRING)
+    // Utilisation du converter CertificationAttributeConverter ==> on retourne un nombre
+    private Certification certification;
+
+    public Certification getCertification() {
+        return certification;
+    }
+
+    public void setCertification(Certification certification) {
+        this.certification = certification;
+    }
 
     // mapping explicite : on nomme explicitement les noms des colonnes
     // grâce à @Column.

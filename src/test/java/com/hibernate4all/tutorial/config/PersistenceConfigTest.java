@@ -28,7 +28,7 @@ public class PersistenceConfigTest {
         // LocalContainerEntityManagerFactoryBean permettre de configurer notre contexte de persistance
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSourceH2());
-        em.setPackagesToScan(new String[] { "com.hibernate4all.tutorial.domain" });
+        em.setPackagesToScan(new String[] { "com.hibernate4all.tutorial.domain", "com.hibernate4all.tutorial.converter" });
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);

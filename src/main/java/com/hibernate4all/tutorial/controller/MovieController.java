@@ -2,6 +2,7 @@ package com.hibernate4all.tutorial.controller;
 
 import com.hibernate4all.tutorial.domain.Movie;
 import com.hibernate4all.tutorial.repository.MovieRepository;
+import org.hibernate.Hibernate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,9 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Movie> get(@PathVariable("id") Long id){
-        Movie movie = repository.find(id);
+//        Movie proxy = repository.getReference(id);
+//        Movie movie = (Movie) Hibernate.unproxy(proxy);
+        Movie movie = repository.getReference(id);
         if (movie == null){
             return ResponseEntity.notFound().build();
         }

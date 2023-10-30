@@ -5,7 +5,7 @@
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>
-				%-5level %logger{15}.%M %msg%n
+				%highlight(%-5level) %logger{15}.%M %msg%n
 			</pattern>
 		</encoder>
 	</appender>

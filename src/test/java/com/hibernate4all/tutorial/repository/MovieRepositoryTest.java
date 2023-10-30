@@ -21,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @ExtendWith(SpringExtension.class) // Exécuter dans le contexte Spring
-@ContextConfiguration(classes = {PersistenceConfigTest.class})// Indiquer les classes de configuration qu'à besoin Spring pour s'initialiser
+@ContextConfiguration(classes = {PersistenceConfigTest.class})
+// Indiquer les classes de configuration qu'à besoin Spring pour s'initialiser
 // utilise le datasource déjà configuré,idem pour transactionManager ==> cf PersistenceConfig.java
 @SqlConfig(dataSource = "dataSourceH2", transactionManager = "transactionManager")
 // lancer le script sql situé à cette adresse:
@@ -34,17 +35,24 @@ public class MovieRepositoryTest {
     private MovieRepository repository;
 
     @Test
-    public void save_casNominal(){
-        Movie movie = new Movie();
-        movie.setName("Inception");
-        movie.setCertification(Certification.INTERDIT_MOINS_12);
+    public void save_casNominal() {
+//        Movie movie = new Movie();
+//        movie.setName("Inception");
+//        movie.setCertification(Certification.INTERDIT_MOINS_12);
+//        repository.persist(movie);
+//        System.out.println("fin de test");
+
+        // Écriture fluent :
+        Movie movie = new Movie()
+                .withName("Inception")
+                .withDescription("test")
+                .withCertification(Certification.INTERDIT_MOINS_12);
         repository.persist(movie);
-        System.out.println("fin de test");
     }
 
     // Comprendre le flush()
     @Test
-    public void comprendreLeFlush(){
+    public void comprendreLeFlush() {
         Movie movie = new Movie();
         movie.setName("Inception");
         repository.persist2(movie);
@@ -54,7 +62,7 @@ public class MovieRepositoryTest {
     // On va simuler un objet détaché.
     // Il ne sera pas vraiment détaché dans le sens préalablement attaché.
     @Test
-    public void merge_casSimule(){
+    public void merge_casSimule() {
         Movie movie = new Movie();
         movie.setName("Inception 2");
         // Ici, on a déterminé l'id de manière programmatique, normalement c'est Hibernate qui s'en occupe.
@@ -67,7 +75,7 @@ public class MovieRepositoryTest {
 
     // Comprendre le cache de premier niveau.
     @Test
-    public void merge_casSimule2(){
+    public void merge_casSimule2() {
         Movie movie = new Movie();
         movie.setName("Inception 2");
         movie.setId(-1L);
@@ -77,20 +85,20 @@ public class MovieRepositoryTest {
 
 
     @Test
-    public void find_CasNominal(){
+    public void find_CasNominal() {
         Movie memento = repository.find(-2L);
         assertThat(memento.getName()).as("mauvais film récupéré").isEqualTo("Memento");
         assertThat(memento.getCertification()).as("Le converter n'a pas fonctionné.").isEqualTo(Certification.INTERDIT_MOINS_12);
     }
 
     @Test
-    public void getAll_CasNominal(){
+    public void getAll_CasNominal() {
         List<Movie> movies = repository.getAll();
         assertThat(movies).as("l'ensemble de la liste n'a pas été récupéré").hasSize(2);
     }
 
     @Test
-    public void remove_CasNominal(){
+    public void remove_CasNominal() {
         repository.remove(-2L);
         List<Movie> movies = repository.getAll();
         assertThat(movies).as("le film n'a pas été supprimé").hasSize(1);
@@ -99,7 +107,7 @@ public class MovieRepositoryTest {
 
     // Comprendre le cache de premier niveau.
     @Test
-    public void remove_CasNominal2(){
+    public void remove_CasNominal2() {
         repository.remove2(-2L);
         List<Movie> movies = repository.getAll();
         assertThat(movies).as("le film n'a pas été supprimé").hasSize(1);
@@ -107,19 +115,19 @@ public class MovieRepositoryTest {
 
 
     @Test
-    public void getReference_casNominal(){
+    public void getReference_casNominal() {
         Movie movie = repository.getReference(-2L);
         assertThat(movie.getId()).as("la référence n'a pas été correctement chargée").isEqualTo(-2L);
     }
 
     @Test
-    public void getReference2_casNominal(){
+    public void getReference2_casNominal() {
         Movie movie = repository.getReference2(-2L);
         assertThat(movie.getId()).as("la référence n'a pas été correctement chargée").isEqualTo(-2L);
     }
 
     @Test
-    public void getReference_fail(){
+    public void getReference_fail() {
         // On va passer dans un état DETACHED (getReference3 n'a pas de session).
         // DETACHED car la session se ferme ==> le proxy récupéré sera donc DETACHED.
         // ==> provoque une erreur de test : on peut uniquement récupérer la référence,
@@ -138,7 +146,7 @@ public class MovieRepositoryTest {
             LOGGER.trace("movie name : " + movie.getName());
             //LOGGER.trace("movie name : " + movie.getId());
             assertThat(movie.getId()).as("la référence n'a pas été correctement chargée").isEqualTo(-2L);
-        } );
+        });
     }
 
 

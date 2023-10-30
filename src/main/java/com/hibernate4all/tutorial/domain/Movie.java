@@ -20,10 +20,37 @@ public class Movie {
     @Column(nullable = false) // contrainte not null en base de données
     private String name;
 
+    // mapping explicite : on nomme explicitement les noms des colonnes
+    // grâce à @Column.
+    @Column(name = "description")
+    private String description;
+
     //@Enumerated // On indique à Hibernate que c'est une énumération.
     //@Enumerated(EnumType.STRING)
     // Utilisation du converter CertificationAttributeConverter ==> on retourne un nombre
     private Certification certification;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void  setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Movie withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Certification getCertification() {
         return certification;
@@ -33,10 +60,12 @@ public class Movie {
         this.certification = certification;
     }
 
-    // mapping explicite : on nomme explicitement les noms des colonnes
-    // grâce à @Column.
-    @Column(name = "description")
-    private String description;
+    public Movie withCertification(Certification certification) {
+        this.certification = certification;
+        return this;
+    }
+
+
     public String getDescription() {
         return description;
     }
@@ -47,20 +76,9 @@ public class Movie {
         this.description = description;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public Movie withDescription(String description) {
+        this.description = description;
+        return this;
     }
 
     @Override

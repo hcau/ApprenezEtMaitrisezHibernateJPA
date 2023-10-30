@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "6be736f4-c7bf-4487-a6f6-0932cd19b696",
+		"name": "hibernate_udemy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19782805"
+	},
+	"item": [
+		{
+			"name": "updateMovieById",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"username\": \"Bob\",\n        \"firstname\": \"Alphonse 1er\",\n        \"lastname\": \"Dupont1d\",\n        \"email\": \"alphonse.dupont1@gmail.com\",\n        \"role\": \"role311\",\n        \"ssn\": \"ssn10321\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/1035",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1035"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postMovieInBody",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"name\": \"La soupe aux choux\",\n        \"description\": \"film bourin\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movie/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movie",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getMovieById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/movie/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movie",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteMovieById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/users/10344",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"10344"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

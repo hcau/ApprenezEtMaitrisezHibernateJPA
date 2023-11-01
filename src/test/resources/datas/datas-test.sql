@@ -1,9 +1,13 @@
 
 -- astuce à connaitre, sur H2, ajouter ces lignes : SET REFERENTIAL_INTEGRITY FALSE;
 SET REFERENTIAL_INTEGRITY FALSE;
-TRUNCATE TABLE REVIEW;
-TRUNCATE TABLE MOVIE;
+TRUNCATE TABLE Review;
+TRUNCATE TABLE Movie;
 SET REFERENTIAL_INTEGRITY TRUE;
 
-INSERT INTO MOVIE (name,certification, id) VALUES ('Inception', 1, -1L);
-INSERT INTO MOVIE (name,certification, id) VALUES ('Memento', 2, -2L);
+INSERT INTO Movie (name,certification, id) VALUES ('Inception', 1, -1L);
+INSERT INTO Movie (name,certification, id) VALUES ('Memento', 2, -2L);
+
+INSERT INTO Review (author, content, movie_id, id) VALUES ('Max', 'au top', -1L, -1L);
+INSERT INTO Review (author, content, movie_id, id) VALUES ('Ernest', 'bof bof', -1L, -2L);
+

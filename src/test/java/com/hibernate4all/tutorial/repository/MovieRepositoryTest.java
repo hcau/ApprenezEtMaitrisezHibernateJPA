@@ -58,6 +58,14 @@ public class MovieRepositoryTest {
     }
 
     @Test
+    public void associationGet_casNominal() {
+        assertThrows(LazyInitializationException.class, () -> {
+            Movie movie = repository.find(-1L);
+            LOGGER.trace("nombre de reviews : " + movie.getReviews().size());
+        });
+    }
+
+    @Test
     public void save_casNominal() {
 //        Movie movie = new Movie();
 //        movie.setName("Inception");

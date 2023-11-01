@@ -2,6 +2,7 @@ package com.hibernate4all.tutorial.repository;
 
 import com.hibernate4all.tutorial.config.PersistenceConfigTest;
 import com.hibernate4all.tutorial.domain.Certification;
+import com.hibernate4all.tutorial.domain.Genre;
 import com.hibernate4all.tutorial.domain.Movie;
 import com.hibernate4all.tutorial.domain.Review;
 import org.hibernate.LazyInitializationException;
@@ -65,6 +66,49 @@ public class MovieRepositoryTest {
         });
     }
 
+    @Test
+    public void save_withGenres(){
+        Movie movie = new Movie().withName("The Social Network");
+        Genre bio = new Genre().withName("Biography");
+        Genre drama = new Genre().withName("Drama");
+        movie.addGenre(bio);
+        movie.addGenre(drama);
+        // comme indiqué dans la classe Movie, le persist se propage au genre.
+        // ==> @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+        repository.persist(movie);
+        assertThat(bio.getId()).as("L'entité aurait dû être persisté").isNotNull();
+    }
+
+    /**
+     * Un genre existera déjà en base de données.
+     * INSERT INTO Genre (name, id) VALUES ('Action', -1L);
+     */
+    @Test
+    public void save_withExistingGenre(){
+        Movie movie = new Movie().withName("The Social Network");
+        Genre bio = new Genre().withName("Biography");
+        Genre drama = new Genre().withName("Drama");
+        // ce genre existe déjà en base de données.
+        Genre action = new Genre().withName("Action");
+        action.setId(-1L);
+        movie.addGenre(bio).addGenre(drama).addGenre(action);
+        // comme indiqué dans la classe Movie, le persist se propage au genre.
+        // ==> @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+        repository.persist(movie);
+        assertThat(bio.getId()).as("L'entité aurait dû être persisté").isNotNull();
+    }
+
+    @Test
+    public void merge_withExistingGenre(){
+        Movie movie = new Movie().withName("The Social Network");
+        Genre bio = new Genre().withName("Biography");
+        Genre drama = new Genre().withName("Drama");
+        // ce genre existe déjà en base de données.
+        Genre action = new Genre().withName("Action");
+        action.setId(-1L);
+        movie.addGenre(bio).addGenre(drama).addGenre(action);
+        repository.merge(movie);
+    }
     @Test
     public void save_casNominal() {
 //        Movie movie = new Movie();

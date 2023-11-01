@@ -75,6 +75,39 @@ public class Movie {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "movie")
     private List<Review> reviews = new ArrayList<>();
 
+    /**
+     * On est du côté qui porte la relation, donc on va
+     * définir quelles sont les cascades.
+     * cascade = CascadeType.PERSIST ==> quand je
+     * persiste un Movie, je veux que les Genres
+     * associés soient aussi persistés.
+     * CascadeType.MERGE ==> si je merge un Movie,
+     * je veux que les Genres soient aussi mergés.
+     */
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name= "genre_id"))
+    private Set<Genre> genres = new HashSet<>();
+
+    public Movie addGenre(Genre genre){
+        if(genre != null){
+            // On renseigne les deux sens (bidirectionnel).
+            this.genres.add(genre);
+            genre.getMovies().add(this);
+        }
+        return this; // aspect fluent, on retourne this.
+    }
+
+    public Movie removeGenre(Genre genre){
+        if(genre != null){
+            // On renseigne les deux sens (bidirectionnel).
+            this.genres.remove(genre);
+            genre.getMovies().remove(this);
+        }
+        return this; // aspect fluent, on retourne this.
+    }
+
+
     public Movie addReview(Review review){
         if(review != null){
             // On renseigne les deux sens (bidirectionnel).
@@ -155,6 +188,11 @@ public class Movie {
     public Movie withReviews(List<Review> reviews) {
         this.reviews = reviews;
         return this;
+    }
+
+    public Set<Genre> getGenres() {
+        //return genres;
+        return Collections.unmodifiableSet(genres);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.hibernate4all.tutorial.repository;
 import com.hibernate4all.tutorial.config.PersistenceConfigTest;
 import com.hibernate4all.tutorial.domain.Certification;
 import com.hibernate4all.tutorial.domain.Movie;
+import com.hibernate4all.tutorial.domain.Review;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,28 @@ public class MovieRepositoryTest {
 
     @Autowired
     private MovieRepository repository;
+
+    @Test
+    public void associationSave_casNominal(){
+        Movie movie = new Movie()
+                .withName("Fight Club")
+                .withCertification(Certification.INTERDIT_MOINS_12)
+                .withDescription("Le fight club n'existe pas");
+
+        Review review1 = new Review().withAuthor("max").withContent("super film !");
+        Review review2 = new Review().withAuthor("jp").withContent("au top");
+
+//        review1.setMovie(movie);
+//        review2.setMovie(movie);
+//        movie.getReviews().add(review1);
+//        movie.getReviews().add(review2);
+        movie.addReview(review1);
+        movie.addReview(review2);
+
+        // On va aussi persister, par cascade (dans Movie ==> cascade = CascadeType.ALL),
+        // nos deux review qui sont contenu dans Movie.
+        repository.persist(movie);
+    }
 
     @Test
     public void save_casNominal() {

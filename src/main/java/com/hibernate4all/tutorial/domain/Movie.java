@@ -2,7 +2,7 @@ package com.hibernate4all.tutorial.domain;
 
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "MOVIE")
@@ -29,6 +29,69 @@ public class Movie {
     //@Enumerated(EnumType.STRING)
     // Utilisation du converter CertificationAttributeConverter ==> on retourne un nombre
     private Certification certification;
+
+    /**
+     * Comment faire une association bidirectionnelle?
+     * Association bidirectionnelle: pouvoir accéder à Review depuis
+     * votre entité movie; en gros faire un movie.getReview();
+     * Hibernate permet ce genre d'association, même ce n'est pas
+     * naturel d'un point de vue base de données.
+     * ==> Le sens Movie->Review n'existe pas en Base de données,
+     * seul le sens Review->Movie est matérialisé.
+     *
+     * Notre Movie pourra contenir plusieurs entités Review.
+     *        _________               _________
+     *       |        |               |       |
+     *       | Review | 1 --------> * | Movie |
+     *       |        |               |       |
+     *       ----------               ---------
+     *
+     * On crée donc une liste de Review.
+     * private List<Review> reviews;
+     *
+     * Maintenant, on va choisir l'annotation.
+     * Un Movie peut avoir plusieurs Review.
+     * @OneToMany
+     * On peut aussi dire: quel côté de l'association contient
+     * la clé étrangère.
+     * La clé étrangère de movie_id est contenu dans Review.
+     * ==> mappedBy = "movie"  ==> ça veut dire que dans Review,
+     * l'attribut movie correspond à la clé étrangère ==> (classe esclave)
+     *
+     * cascade = CascadeType.ALL ==> ça veut dire que les opérations
+     * faites sur Movie vont être cascadée vers Review.
+     * Cascade All : on propage les actions ...
+     * ... effectuées sur l'entité vers l'association.
+     * Exemple : persist, delete ...
+     * Par exemple, si on décide de sauvegarder Movie, ça va sauvegarder
+     * les Reviews contenues dans ce Movie.
+     *
+     * orphanRemoval = true ==> évite les orphelins
+     * Par exemple si on fait : review.setMovie(null)
+     * Si Hibernate, dans sa session voit une entité Review qui n'est pas
+     * associée à une entité Movie, alors Hibernate va supprimer cette
+     * entité Review qui est orpheline.
+     */
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "movie")
+    private List<Review> reviews = new ArrayList<>();
+
+    public Movie addReview(Review review){
+        if(review != null){
+            // On renseigne les deux sens (bidirectionnel).
+            this.reviews.add(review);
+            review.setMovie(this);
+        }
+        return this; // aspect fluent, on retourne this.
+    }
+
+    public Movie removeReview(Review review){
+        if(review != null){
+            // On renseigne les deux sens (bidirectionnel).
+            this.reviews.remove(review);
+            review.setMovie(null);
+        }
+        return this; // aspect fluent, on retourne this.
+    }
 
 
     public Long getId() {
@@ -78,6 +141,19 @@ public class Movie {
 
     public Movie withDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public List<Review> getReviews() {
+        //return reviews;
+        return Collections.unmodifiableList(reviews);
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+    public Movie withReviews(List<Review> reviews) {
+        this.reviews = reviews;
         return this;
     }
 
